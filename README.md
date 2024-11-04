@@ -11,7 +11,7 @@ poetry install
 ```
 
 ## Usage
-To use this app, run server
+To use this app, put OPENAI_API_KEY in .env file and run server
 
 ```bash
 poetry run python app.py
