@@ -9,7 +9,7 @@ from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 
 
-def get_file_agent(root_dir: str | None = None):
+async def get_file_agent(root_dir: str | None = None):
     """
     Initializes a file management agent.
 

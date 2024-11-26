@@ -11,7 +11,7 @@ from app import app
 client = TestClient(app)
 
 
-def send_agent_request(msg, root_dir="./"):
+async def send_agent_request(msg, root_dir="./"):
     """
     Sends a request to the agent endpoint.
 
@@ -35,7 +35,7 @@ async def test_create_folder():
     was created successfully in the file system.
     """
     folder_name = "test_folder"
-    response = send_agent_request(f"Create a folder named {folder_name}")
+    response = await send_agent_request(f"Create a folder named {folder_name}")
 
     assert response.status_code == 200
     assert os.path.isdir(folder_name), "Folder was not created successfully."
@@ -52,7 +52,7 @@ async def test_create_file():
     was created successfully in the file system.
     """
     file_name = "test_file.txt"
-    response = send_agent_request(f"Create a file named {file_name}")
+    response = await send_agent_request(f"Create a file named {file_name}")
 
     assert response.status_code == 200
     assert os.path.isfile(file_name), "File was not created successfully."
@@ -70,7 +70,7 @@ async def test_create_file_and_folder():
     """
     test_dir = "test_dir"
     file_name = "test_file.txt"
-    response = send_agent_request(
+    response = await send_agent_request(
         f"Create a file named {file_name} in {test_dir}. "
         f"If {test_dir} doesn't exist, create it."
     )
@@ -99,7 +99,7 @@ async def test_rename_file():
     with open(file_name, "w", encoding="utf-8") as f:
         f.write("This is a test file.")
 
-    response = send_agent_request(f"Rename file {file_name} to {new_file_name}")
+    response = await send_agent_request(f"Rename file {file_name} to {new_file_name}")
 
     assert response.status_code == 200
     assert not os.path.isfile(file_name)
@@ -122,7 +122,7 @@ async def test_list_files_in_directory():
         with open(name, "w", encoding="utf-8") as f:
             f.write("This is a test file.")
 
-    response = send_agent_request("List all .txt files")
+    response = await send_agent_request("List all .txt files")
 
     assert response.status_code == 200
     assert "file1.txt" in response.json()["msg"]
@@ -151,7 +151,7 @@ async def test_change_file_extension():
         with open(os.path.join(test_dir, name), "w", encoding="utf-8") as f:
             f.write("This is a test file.")
 
-    response = send_agent_request(
+    response = await send_agent_request(
         f"I want to find all files in directory {test_dir} with .txt extension. "
         f"Then for those of these files which contain at least 1 word log, "
         f"change their extension to .log"

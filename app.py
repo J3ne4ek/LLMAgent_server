@@ -45,9 +45,9 @@ async def agent_endpoint(request: AgentRequest):
     Raises:
     - HTTPException (status_code=500): If an error occurs during command execution.
     """
-    agent_executor = get_file_agent(root_dir=request.root_dir)
+    agent_executor = await get_file_agent(root_dir=request.root_dir)
     try:
-        response = agent_executor.invoke({"input": request.msg})
+        response = await agent_executor.ainvoke({"input": request.msg})
         return {"msg": response["output"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
